@@ -11,7 +11,6 @@ import lxml.etree
 import lxml.html
 import lxml.html.clean
 import re
-import traceback
 
 from copy import deepcopy
 
@@ -46,16 +45,13 @@ class Parser(object):
         html = utils.get_unicode(html, is_html=True)
         # Enclosed in a `try` to prevent bringing the entire library
         # down due to one article (out of potentially many in a `Source`)
-        try:
-            # Remove encoding tag because lxml won't accept it for
-            # unicode objects (Issue #78)
-            if html.startswith('<?'):
-                html = re.sub(r'^\<\?.*?\?\>', '', html, flags=re.DOTALL)
-            cls.doc = lxml.html.fromstring(html)
-            return cls.doc
-        except Exception:
-            traceback.print_exc()
-            return None
+
+        # Remove encoding tag because lxml won't accept it for
+        # unicode objects (Issue #78)
+        if html.startswith('<?'):
+            html = re.sub(r'^\<\?.*?\?\>', '', html, flags=re.DOTALL)
+        cls.doc = lxml.html.fromstring(html)
+        return cls.doc
 
     @classmethod
     def clean_article_html(cls, node):
