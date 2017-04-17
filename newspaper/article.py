@@ -133,6 +133,9 @@ class Article(object):
         # A property dict for users to store custom data.
         self.additional_data = {}
 
+        # Reason to failed to parse article
+        self.cause = None
+
     def build(self):
         """Build a lone article from a URL independent of the source (newspaper).
         Don't normally call this method b/c it's good to multithread articles
