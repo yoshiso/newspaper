@@ -154,8 +154,11 @@ class Article(object):
         if not self.is_downloaded:
             print 'You must download() an article before parsing it!'
             raise ArticleException()
-
-        self.doc = self.config.get_parser().fromstring(self.html)
+        try:
+          self.doc = self.config.get_parser().fromstring(self.html)
+        except Exception as e:
+            self.cause = e
+            self.doc = None
         self.clean_doc = copy.deepcopy(self.doc)
 
         if self.doc is None:
